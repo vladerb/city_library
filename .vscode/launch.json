@@ -14,8 +14,7 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            // "program": "D:\\python\\ItStep\\work in class\\77-78\\mytestsite\\manage.py"
-            "program": "D:\\python\\ItStep\\homework\\September\\78\\mytestsite\\manage.py"
+            "program": "D:\\city_library\\library\\manage.py"
         }
     ]
 }

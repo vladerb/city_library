@@ -1,0 +1,109 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark p-0">
+    <div class="container-fluid d-flex align-items-center">
+        <!-- Логотип та меню -->
+        <a class="navbar-brand d-flex align-items-center" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvas" aria-controls="offcanvasWithBackdrop">
+            <i class="bi bi-list-ul me-2 fs-4"></i> Library
+        </a>
+
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+
+            <!-- Іконка користувача -->
+            <li class="nav-item">
+                <a href="" class="nav-link"><i class="bi bi-person-circle fs-3"></i></a>
+            </li>
+
+            <!-- Іконка виходу лише якщо користувач залогінився -->
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <form method="post" action="" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link btn btn-link p-0" style="border: none;">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                </form>
+            </li>
+            {% endif %}
+
+            <!-- Дропдаун категорій -->
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link dropdown-toggle m-0" href="#" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Categories
+                </a>
+                <ul class="dropdown-menu">
+                    {% for category in categories%}
+                    <li><a class="dropdown-item" href=""></a></li>
+                    {% empty %}
+                    <li><a class="dropdown-item" href="#">No categories available</a></li>
+                    {% endfor %}
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="">All categories</a></li>
+                </ul>
+            </li>
+
+            <!-- Форма пошуку -->
+            <li class="nav-item">
+                <form method="GET" action="" class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="offcanvas offcanvas-start w-25" tabindex="-1" id="offcanvas" data-bs-keyboard="false"
+    data-bs-backdrop="false">
+
+    <div class="offcanvas-header">
+        <h3 class="offcanvas-title d-none d-sm-block" id="offcanvas">Menu</h3>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column px-0">
+        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start flex-grow-1" id="menu">
+            <li class="nav-item">
+                <a href="" class="nav-link text-truncate">
+                    <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="" class="nav-link text-truncate">
+                    <i class="bi bi-journal-arrow-up"></i><span class="ms-1 d-none d-sm-inline">Published post</span>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link dropdown-toggle text-truncate" id="dropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-collection"></i><span class="ms-1 d-none d-sm-inline">Categories</span>
+                </a>
+                <ul class="dropdown-menu text-small shadow ms-5" aria-labelledby="dropdown">
+                    {% for category in categories %}
+                    <li><a class="dropdown-item" href="">{{ category.title }}</a></li>
+                    {% empty %}
+                    <li><a class="dropdown-item" href="#">No categories available</a></li>
+                    {% endfor %}
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="">All categories</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link text-truncate">
+                    <i class="bi bi-hash"></i><span class="ms-1 d-none d-sm-inline">Hashtags</span>
+                </a>
+            </li>
+            <li class="nav-item mt-auto">
+                <a href="" class="nav-link text-truncate">
+                    <i class="bi bi-chat"></i><span class="ms-1 d-none d-sm-inline">Give Feedback/Report bug</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    
+</div>

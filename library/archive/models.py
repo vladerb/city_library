@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg
 
 User = get_user_model()
 
@@ -28,9 +29,11 @@ class Book(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='books', null=True, blank=True)
     cover = models.ImageField(upload_to='books/', default='books/default_book_cover.png', null=True, blank=True)
 
-
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def average_rating(self) -> int:
+        return int(round(Rating.objects.filter(post=self).aggregate(Avg('score'))['score__avg'] or 0))
     
 
 class Rating(models.Model):

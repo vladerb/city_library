@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Books</h1>
+    {% if query %}
+    <h6>Result for: {{ query }}</h6>
+    {% endif %}
+    
+    {% if not books %}
+    <div class="alert alert-warning text-center mt-5 p-5" role="alert">
+        <h1 class="display-4 text-danger">No books found</h1>
+        <p class="lead">Unfortunately, we couldn't find any books matching your search criteria.</p>
+        <hr>
+        <p class="mb-0">Try searching with different keywords or <a href="" class="alert-link">view all books</a>.</p>
+    </div>
+    {% else %}
+    
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for book in books %}
+        <div class="col">
+            <div class="card h-100">
+                {% if book.receipts.exists %}
+                <div class="card-header bg-danger text-white text-center">
+                    This book is currently unavailable
+                </div>
+                {% endif %}
+                <div class="row align-items-center g-0">
+                    <div class="col-md-4">
+                        <img src="{{ book.cover.url }}" class="img-fluid rounded ms-2" alt="Book Cover">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                            <p class="card-text"><strong>Category:</strong> {{ book.category.title }}</p>
+                            <p class="card-text">
+                                <strong>Rating:</strong>
+                                {% for i in "12345" %}
+                                <i class="bi {% if forloop.counter <= book.average_rating %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                                {% endfor %}
+                            </p>
+                            <a href="" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for page_number in page_obj.paginator.page_range %}
+            {% if page_obj.number == page_number %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ page_number }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    
+    {% endif %}
+</div>
+{% endblock %}
