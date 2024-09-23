@@ -12,7 +12,7 @@ urlpatterns = [
     path('archive/', include('archive.urls', namespace='archive')),
     # path('auth/', include('accounts.urls', namespace='accounts')),
     # path('lib-admin/', include('lib_admin.urls', namespace='lib-admin')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # + debug_toolbar_urls()
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + debug_toolbar_urls()
 
 
 

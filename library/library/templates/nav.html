@@ -32,15 +32,15 @@
                     Categories
                 </a>
                 <ul class="dropdown-menu">
-                    {% for category in categories%}
-                    <li><a class="dropdown-item" href=""></a></li>
+                    {% for category in categories %}
+                    <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
                     {% empty %}
                     <li><a class="dropdown-item" href="#">No categories available</a></li>
                     {% endfor %}
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="">All categories</a></li>
+                    <li><a class="dropdown-item" href="{% url 'archive:books-list' %}">All categories</a></li>
                 </ul>
             </li>
 
@@ -67,43 +67,39 @@
     <div class="offcanvas-body d-flex flex-column px-0">
         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start flex-grow-1" id="menu">
             <li class="nav-item">
-                <a href="" class="nav-link text-truncate">
-                    <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
+                <a href="" class="nav-link text-truncate fs-5"> 
+                    <i class="bi bi-book"></i><span class="ms-1 d-none d-sm-inline">Main page</span>
                 </a>
             </li>
             <li>
-                <a href="" class="nav-link text-truncate">
-                    <i class="bi bi-journal-arrow-up"></i><span class="ms-1 d-none d-sm-inline">Published post</span>
+                <a href="" class="nav-link text-truncate fs-5">  
+                    <i class="bi bi-bookmark-heart"></i><span class="ms-1 d-none d-sm-inline">Available now books</span>
                 </a>
             </li>
             <li class="dropdown">
-                <a href="#" class="nav-link dropdown-toggle text-truncate" id="dropdown" data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                <a href="#" class="nav-link dropdown-toggle text-truncate fs-5" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-collection"></i><span class="ms-1 d-none d-sm-inline">Categories</span>
                 </a>
                 <ul class="dropdown-menu text-small shadow ms-5" aria-labelledby="dropdown">
                     {% for category in categories %}
-                    <li><a class="dropdown-item" href="">{{ category.title }}</a></li>
+                    <li><a class="dropdown-item fs-5" href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>  
                     {% empty %}
-                    <li><a class="dropdown-item" href="#">No categories available</a></li>
+                    <li><a class="dropdown-item fs-5" href="#">No categories available</a></li>  
                     {% endfor %}
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="">All categories</a></li>
+                    <li><a class="dropdown-item fs-5" href="{% url 'archive:books-list' %}">All categories</a></li>  
                 </ul>
             </li>
-            <li class="nav-item">
-                <a href="" class="nav-link text-truncate">
-                    <i class="bi bi-hash"></i><span class="ms-1 d-none d-sm-inline">Hashtags</span>
-                </a>
-            </li>
+        
             <li class="nav-item mt-auto">
-                <a href="" class="nav-link text-truncate">
+                <a href="" class="nav-link text-truncate">  
                     <i class="bi bi-chat"></i><span class="ms-1 d-none d-sm-inline">Give Feedback/Report bug</span>
                 </a>
             </li>
         </ul>
     </div>
+    
     
 </div>

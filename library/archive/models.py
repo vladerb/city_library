@@ -2,12 +2,13 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Avg
+from django.urls import reverse
 
 User = get_user_model()
 
 
 class Author(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     photo = models.ImageField(upload_to='authors/', default='authors/default_autor.webp', null=True, blank=True)
     bio = models.TextField(blank=True)
 
@@ -21,6 +22,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("archive:books-list-category", args=[self.pk])
 
 
 class Book(models.Model):
@@ -28,12 +32,13 @@ class Book(models.Model):
     title = models.CharField(verbose_name="Назва книги", max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='books', null=True, blank=True)
     cover = models.ImageField(upload_to='books/', default='books/default_book_cover.png', null=True, blank=True)
+    description = models.TextField(verbose_name="Опис книги", default='Опис відсутній.', max_length=500, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     def average_rating(self) -> int:
-        return int(round(Rating.objects.filter(post=self).aggregate(Avg('score'))['score__avg'] or 0))
+        return int(round(Rating.objects.filter(book=self).aggregate(Avg('score'))['score__avg'] or 0))
     
 
 class Rating(models.Model):
