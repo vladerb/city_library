@@ -99,7 +99,10 @@ class BookDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = RatingForm()
         
-        context['has_receipt'] = self.object.receipts.filter(profile=self.request.user.profile).exists() #type: ignore
+        if self.request.user.is_authenticated:
+            context['has_receipt'] = self.object.receipts.filter(profile=self.request.user.profile).exists() #type: ignore
+        else: 
+            context['has_receipt'] = False
         return context
     
     def get_queryset(self):
