@@ -40,10 +40,12 @@ class BookReceipt(models.Model):
     def __str__(self):
         return f'{self.book.title} received by {self.profile.user.username}'
     
-    def save(self, *args, **kwargs):
-        if self.profile.books_received.count() >= 3:
-            raise ValidationError('A user can only receive up to 3 books.')
-        super().save(*args, **kwargs)
+    def clean(self):
+        if self.pk is None:  # новий запис
+            if self.profile.books_received.count() >= 3:
+                raise ValidationError('A user can only receive up to 3 books.')
+        else:  # редагування існуючого запису
+            ...
 
 
 class Contact(models.Model):

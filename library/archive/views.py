@@ -1,16 +1,15 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg, Q
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.forms import ValidationError
+from django.http import HttpRequest
+from django.shortcuts import get_object_or_404, redirect
 from django.views import View
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView
 
 from .forms import RatingForm
-from .models import Book, Category, Comments, Rating
+from .models import Book, Category, Rating
+from accounts.models import BookReceipt
 
 PAGINATION_NUMBER = 9
 
@@ -75,6 +74,7 @@ class BookListView(ListView):
                 .annotate(average_rating=Avg('rating__score'))
                 )
     
+
 class AvailableBookListView(ListView):
     model = Book
     template_name = 'archive/book/book_list.html'
@@ -89,6 +89,7 @@ class AvailableBookListView(ListView):
                 .annotate(average_rating=Avg('rating__score'))
                 )
     
+
 class BookDetailView(DetailView):
     model = Book
     template_name = 'archive/book/book_detail.html'
@@ -97,6 +98,8 @@ class BookDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = RatingForm()
+        
+        context['has_receipt'] = self.object.receipts.filter(profile=self.request.user.profile).exists() #type: ignore
         return context
     
     def get_queryset(self):
@@ -117,13 +120,37 @@ class BookSearchListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         return (Book.objects
-                .filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(author__name__icontains=query)))
-                # .distinct()
-                # .select_related('category', 'author')
-                # .prefetch_related('receipts')
-                # .annotate(average_rating=Avg('rating__score')))
+                .filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(author__name__icontains=query))
+                .distinct()
+                .select_related('category', 'author')
+                .prefetch_related('receipts')
+                .annotate(average_rating=Avg('rating__score')))
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q')
         return context
+    
+
+class BookOrderView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        book = get_object_or_404(Book, pk=pk)
+        profile = request.user.profile
+        
+        try:
+            receipt = BookReceipt.objects.create(profile=profile, book=book)
+            messages.success(request, f'You have successfully reserved "{book.title}".')
+        except ValidationError as e:
+            messages.error(request, str(e))
+
+        return redirect('archive:book-detail', pk=book.pk)  
+    
+
+class BookReturnView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        book = get_object_or_404(Book, pk=pk)
+        receipt = BookReceipt.objects.get(book=book, profile=request.user.profile)
+        receipt.delete()
+        messages.success(request, 'Книгу успішно повернуто!')
+
+        return redirect('archive:book-detail', pk=book.pk)

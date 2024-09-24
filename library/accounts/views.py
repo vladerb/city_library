@@ -36,7 +36,7 @@ class FeedbackSuccessView(TemplateView):
 class UserRegisterView(SuccessMessageMixin, CreateView):
     model = get_user_model()
     form_class = UserRegistrationForm
-    template_name = 'accounts/register.html'
+    template_name = 'accounts/user/register.html'
     success_url = reverse_lazy('accounts:user-login')
     success_message = "Registration successful! You can now log in."
 
@@ -69,6 +69,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         context['books'] = (user.profile.books_received # type: ignore
                             .select_related('category', 'author') 
+                            .prefetch_related('receipts')
                             .annotate(average_rating=Avg('rating__score'))  
                             .all())
         return context
@@ -93,7 +94,13 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, 'Profile updated successfully.')
+        profile_form = ProfileEditFrom(self.request.POST, self.request.FILES, instance=self.request.user.profile)  # type: ignore
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(self.request, 'Profile updated successfully.')
+        else:
+            messages.error(self.request, 'There was an error updating the profile.')
+
         return response
 
 # Password

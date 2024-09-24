@@ -10,7 +10,7 @@
         This book is currently unavailable
     </div>
     {% endif %}
-    
+
     <div class="row p-4">
         <!-- Image section -->
         <div class="col-md-4">
@@ -34,28 +34,33 @@
                 <p><strong>Опис:</strong> {{ book.description|truncatechars:300 }}</p>
             </div>
             <div class="mt-auto">
-                
+
                 <form id="rating-form" method="post" action="{% url 'archive:rate-book' book.pk %}">
                     {% csrf_token %}
                     <span><strong>Рейтинг:</strong></span>
                     <div class="star-rating">
                         {% for radio in form.score %}
-                        <input 
-                            type="radio" 
-                            name="{{form.score.name}}" 
-                            id="{{ radio.id_for_label }}"
+                        <input type="radio" name="{{form.score.name}}" id="{{ radio.id_for_label }}"
                             value="{{ radio.choice_label }}" 
-                            {% if radio.choice_label == book.average_rating|floatformat:"0"|stringformat:'s' %} checked {% endif %}
+                            {% if radio.choice_label == book.average_rating|floatformat:"0"|stringformat:'s' %} checked {% endif %} 
                             onchange="submitRating()">
                         <label class="bi bi-star-fill" for="{{ radio.id_for_label }}"></label>
                         {% endfor %}
                     </div>
                 </form>
-                {% if not book.receipts.exists %}
-                <a href="{% url 'archive:books-list' %}" class="btn btn-primary mt-3">Забранювати книгу</a>
+                {% if has_receipt %}
+                    <form method="post" action="{% url 'archive:return-book' book.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger mt-3">Повернути книгу</button>
+                    </form>
+                {% elif not book.receipts.exists %}
+                    <form method="post" action="{% url 'archive:order-book' book.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary mt-3">Забронювати книгу</button>
+                    </form>
                 {% endif %}
                 <a href="{% url 'archive:books-list' %}" class="btn btn-secondary mt-3">Повернутися до списку книг</a>
-                
+
             </div>
         </div>
     </div>
