@@ -12,6 +12,8 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 from .forms import RatingForm
 from .models import Book, Category, Comments, Rating
 
+PAGINATION_NUMBER = 9
+
 
 # Rating
 class RateBookView(LoginRequiredMixin, View):
@@ -35,11 +37,12 @@ class RateBookView(LoginRequiredMixin, View):
 
         return redirect('archive:book-detail', pk=book.pk)
     
+
 # Category
 class CategoryListView(ListView):
     model = Book
     template_name = 'archive/book/book_list.html'
-    paginate_by = 6
+    paginate_by = PAGINATION_NUMBER
     
     context_object_name = 'books'
 
@@ -61,7 +64,7 @@ class CategoryListView(ListView):
 class BookListView(ListView):
     model = Book
     template_name = 'archive/book/book_list.html'
-    paginate_by = 6
+    paginate_by = PAGINATION_NUMBER
     
     context_object_name = 'books'
     

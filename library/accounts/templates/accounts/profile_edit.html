@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card w-30 bg-light shadow-lg p-4">
+        <h1 class="mb-3 text-center">Edit Profile</h1>
+        <p class="text-center">Update your profile information below:</p>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}
+            {{ profile_form|crispy }}
+            <p class="text-center mt-2">
+                You can change your password using 
+                <a href="{% url 'accounts:user-password-edit' %}">this form</a>.
+            </p>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+            </div>
+        </form>
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center mt-4" style="min-height: 80vh;">
+    <div class="card w-50 bg-light shadow-lg p-4">
+        <h1 class="mb-3 text-center">Register account</h1>
+        <p class="text-center">Please, sign up using the following form:</p>
+        <form method="post" novalidate class="text-center">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <button type="submit" class="btn btn-primary btn-block mt-3">Create account</button>
+        </form>
+        <p class="text-center mt-3">Already have an account? 
+            <a href="{% url 'accounts:user-login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">Log in here</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{{ request.user.username }}'s Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card"> 
+                <div class="card-header bg-dark text-white">
+                    <h4 class="card-title mb-0">User Information</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="mb-4">Dashboard</h1>
+                    <p class="lead">Welcome to your dashboard, {{ request.user.username }}!</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Username:</strong> {{ request.user.username }}</li>
+                        <li><strong>Name:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</li>
+                        <li><strong>Date Joined:</strong> {{ request.user.date_joined|date:"F j, Y" }}</li>
+                        <li><strong>Email:</strong> {{ request.user.email }}</li>
+                        <li><strong>Last Login:</strong> {{ request.user.last_login|date:"F j, Y, g:i a" }}</li>
+                    </ul>
+                    <div class="d-flex mt-4">
+                        <a href="{% url 'accounts:user-profile-edit' %}" class="btn btn-primary me-3">Edit Profile</a>
+                        <div>
+                            <form method="post" action="{% url 'accounts:user-logout' %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>       
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="card-title mb-0">User Posts</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for book in books %}
+                        <div class="col-md-6 mb-2">
+                            <div class="card h-100">
+                                <div class="row align-items-center g-0">
+                                    <div class="col-md-4">
+                                        <img src="{{ book.cover.url }}" class="img-fluid rounded ms-2" alt="Book Cover">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ book.title|truncatechars:40 }}</h5>
+                                            <p class="card-text"><strong>Author:</strong> {{ book.author|truncatechars:20 }}</p>
+                                            <p class="card-text"><strong>Category:</strong> {{ book.category.title|truncatechars:20 }}</p>
+                                            <p class="card-text">
+                                                <strong>Rating:</strong>
+                                                {% for i in "12345" %}
+                                                <i class="bi {% if forloop.counter <= book.average_rating %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                                                {% endfor %}
+                                            </p>
+                                            <a href="{% url 'archive:book-detail' book.pk %}" class="btn btn-primary">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p>No books.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
