@@ -6,10 +6,31 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg
 from django.shortcuts import redirect
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView, FormView
 from django.urls import reverse_lazy
 
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditFrom
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditFrom, ContactForm
+
+
+# Feedback
+class FeedbackView(FormView):
+    template_name = 'accounts/feedback/contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('accounts:feedback-success')
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'Your message has been sent successfully!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'There was an error in the form. Please check your inputs.')
+        return super().form_invalid(form)
+
+
+class FeedbackSuccessView(TemplateView):
+    template_name = 'accounts/feedback/feedback_success.html'
+
 
 # User
 class UserRegisterView(SuccessMessageMixin, CreateView):
@@ -36,12 +57,12 @@ class UserRegisterView(SuccessMessageMixin, CreateView):
     
 class UserLoginView(LoginView):
     form_class = AuthenticationForm
-    template_name = "accounts/login.html"
+    template_name = "accounts/user/login.html"
     redirect_authenticated_user = False
     
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'accounts/profile.html'
+    template_name = 'accounts/user/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -56,7 +77,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
 class UserProfileEditView(LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UserEditForm
-    template_name = 'accounts/profile_edit.html'
+    template_name = 'accounts/user/profile_edit.html'
     success_url = reverse_lazy('accounts:user-profile')
 
     def get_context_data(self, **kwargs):
@@ -77,7 +98,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
 
 # Password
 class CustomPasswordChangeView(PasswordChangeView):
-    template_name = 'accounts/password_change.html'
+    template_name = 'accounts/user/password_change.html'
     success_url = reverse_lazy('accounts:user-profile')
 
     def form_valid(self, form):

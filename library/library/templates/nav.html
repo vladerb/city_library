@@ -16,7 +16,7 @@
             <!-- Іконка виходу лише якщо користувач залогінився -->
             {% if request.user.is_authenticated %}
             <li class="nav-item">
-                <form method="post" action="" class="d-inline">
+                <form method="post" action="{% url 'accounts:user-logout' %}" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="nav-link btn btn-link p-0" style="border: none;">
                         <i class="bi bi-box-arrow-right"></i>
@@ -46,7 +46,7 @@
 
             <!-- Форма пошуку -->
             <li class="nav-item">
-                <form method="GET" action="" class="d-flex" role="search">
+                <form method="GET" action="{% url 'archive:search-posts' %}" class="d-flex" role="search">
                     <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
@@ -67,12 +67,12 @@
     <div class="offcanvas-body d-flex flex-column px-0">
         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-start flex-grow-1" id="menu">
             <li class="nav-item">
-                <a href="" class="nav-link text-truncate fs-5"> 
+                <a href="{% url 'archive:books-list' %}" class="nav-link text-truncate fs-5"> 
                     <i class="bi bi-book"></i><span class="ms-1 d-none d-sm-inline">Main page</span>
                 </a>
             </li>
             <li>
-                <a href="" class="nav-link text-truncate fs-5">  
+                <a href="{% url 'archive:books-list-available' %}" class="nav-link text-truncate fs-5">  
                     <i class="bi bi-bookmark-heart"></i><span class="ms-1 d-none d-sm-inline">Available now books</span>
                 </a>
             </li>
@@ -94,7 +94,7 @@
             </li>
         
             <li class="nav-item mt-auto">
-                <a href="" class="nav-link text-truncate">  
+                <a href="{% url 'accounts:feedback' %}" class="nav-link text-truncate">  
                     <i class="bi bi-chat"></i><span class="ms-1 d-none d-sm-inline">Give Feedback/Report bug</span>
                 </a>
             </li>

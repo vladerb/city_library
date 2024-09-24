@@ -13,7 +13,8 @@
                 <div class="card-body">
                     <h1 class="mb-4">Dashboard</h1>
                     <p class="lead">Welcome to your dashboard, {{ request.user.username }}!</p>
-                    <ul class="list-unstyled">
+                    <img src="{{ request.user.profile.photo.url }}" class="img-fluid rounded ms-2" width="100px" alt="Book Cover">
+                    <ul class="list-unstyled mt-3">
                         <li><strong>Username:</strong> {{ request.user.username }}</li>
                         <li><strong>Name:</strong> {{ request.user.first_name }} {{ request.user.last_name }}</li>
                         <li><strong>Date Joined:</strong> {{ request.user.date_joined|date:"F j, Y" }}</li>

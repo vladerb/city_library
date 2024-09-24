@@ -1,9 +1,12 @@
 import datetime
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from.models import Profile
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
+from .models import Profile, Contact
 
 
 User = get_user_model()
@@ -75,3 +78,16 @@ class ProfileEditFrom(forms.ModelForm):
         if date_of_birth and date_of_birth >= datetime.date.today():
             raise forms.ValidationError('Date of birth must be in the past.')
         return date_of_birth
+    
+
+# FeedBack    
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'subject', 'message']
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Send Message'))

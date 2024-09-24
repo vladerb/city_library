@@ -13,5 +13,8 @@ urlpatterns = [
     path('profile/', views.UserProfileView.as_view(), name='user-profile'),
     path('profile/edit/', views.UserProfileEditView.as_view(), name='user-profile-edit'),
     path('profile/password/', views.CustomPasswordChangeView.as_view(), name='user-password-edit'),
+
+    path('feedback/', views.FeedbackView.as_view(), name='feedback'),
+    path('feedback/success/', views.FeedbackSuccessView.as_view(), name='feedback-success'),
     
 ]

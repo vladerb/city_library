@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Дякуємо за ваш запит!</h2>
+    <p>Ми зв'яжемося з вами найближчим часом.</p>
+    <a href="{% url 'archive:books-list' %}" class="btn btn-secondary">Повернутися до списку постів</a>    
+</div>
+
+{% endblock %}
+

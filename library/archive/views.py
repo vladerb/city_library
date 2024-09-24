@@ -60,7 +60,7 @@ class CategoryListView(ListView):
         return context
     
 
-# Books
+# Books 
 class BookListView(ListView):
     model = Book
     template_name = 'archive/book/book_list.html'
@@ -70,6 +70,20 @@ class BookListView(ListView):
     
     def get_queryset(self):
         return (Book.objects.all()
+                .select_related('category', 'author')
+                .prefetch_related('receipts')
+                .annotate(average_rating=Avg('rating__score'))
+                )
+    
+class AvailableBookListView(ListView):
+    model = Book
+    template_name = 'archive/book/book_list.html'
+    paginate_by = PAGINATION_NUMBER
+    
+    context_object_name = 'books'
+    
+    def get_queryset(self):
+        return (Book.objects.filter(receipts__isnull=True)
                 .select_related('category', 'author')
                 .prefetch_related('receipts')
                 .annotate(average_rating=Avg('rating__score'))
@@ -91,3 +105,25 @@ class BookDetailView(DetailView):
                 .prefetch_related('receipts')
                 .annotate(average_rating=Avg('rating__score'))
                 )
+    
+
+class BookSearchListView(ListView):
+    model = Book
+    template_name = 'archive/book/book_list.html'
+    paginate_by = PAGINATION_NUMBER
+    
+    context_object_name = 'books'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return (Book.objects
+                .filter(Q(title__icontains=query) | Q(description__icontains=query) | Q(author__name__icontains=query)))
+                # .distinct()
+                # .select_related('category', 'author')
+                # .prefetch_related('receipts')
+                # .annotate(average_rating=Avg('rating__score')))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q')
+        return context

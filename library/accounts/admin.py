@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Profile, BookReceipt
+from .models import Profile, BookReceipt, Contact
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -16,4 +16,11 @@ class BookReceiptAdmin(admin.ModelAdmin):
     search_fields = ['profile__user__username', 'book__title']
     date_hierarchy = 'date_received'
     raw_id_fields = ['profile', 'book']
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'created_at')
+    search_fields = ('name', 'email', 'subject')
+    ordering = ('-created_at',)
+    list_filter = ('created_at',)
 

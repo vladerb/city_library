@@ -29,10 +29,10 @@ class Category(models.Model):
 
 class Book(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
-    title = models.CharField(verbose_name="Назва книги", max_length=250)
+    title = models.CharField(verbose_name="Book`s title", max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='books', null=True, blank=True)
     cover = models.ImageField(upload_to='books/', default='books/default_book_cover.png', null=True, blank=True)
-    description = models.TextField(verbose_name="Опис книги", default='Опис відсутній.', max_length=500, blank=True)
+    description = models.TextField(verbose_name="Book`s description", default='No description.', max_length=500, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
