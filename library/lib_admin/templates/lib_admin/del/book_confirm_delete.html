@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Book{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-danger">Are you sure you want to delete "{{ object.title }}"?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm</button>
+        <a href="{% url 'lib-admin:books-list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -9,7 +9,7 @@ User = get_user_model()
 
 class Author(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    photo = models.ImageField(upload_to='authors/', default='authors/default_autor.webp', null=True, blank=True)
+    photo = models.ImageField(upload_to='authors/', default='authors/default_author.png', null=True, blank=True)
     bio = models.TextField(blank=True)
 
     def __str__(self):

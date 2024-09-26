@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Author{% endblock %}
+
+{% block content %}
+<div class="mt-5 my-3 p-4 bg-light rounded shadow-lg">
+    <h1 class="mb-4 text-center">Edit Author</h1>
+
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.name|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            {{ form.photo|as_crispy_field }}
+        </div>
+        <div class="mb-3">
+            {{ form.bio|as_crispy_field }}
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-warning btn-lg">Update Author</button>
+            <a href="{% url 'lib-admin:authors-list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

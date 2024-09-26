@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %} Books List {% endblock %}
+
+{% block content %}
+<div class="mt-5 my-3 p-3 bg-body rounded shadow-lg">
+    <h1 class="mb-3 text-center">Books List</h1>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'lib-admin:book-create' %}" class="btn btn-primary btn-lg">Create New Book</a>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-1">
+                    <a href="?sort=id&order=asc" class="text-decoration-none">id</a>
+                </th>
+                <th class="col-md-3">
+                    <a href="?sort=title&order={% if request.GET.sort == 'title' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Title 
+                        {% if request.GET.sort == "title" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-3">
+                    <a href="?sort=author__name&order={% if request.GET.sort == 'author__name' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Author 
+                        {% if request.GET.sort == "author__name" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-3">
+                    <a href="?sort=category__title&order={% if request.GET.sort == 'category__title' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Category 
+                        {% if request.GET.sort == "category__title" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-3">Cover</th>
+                <th class="col-md-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.id }}.</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author.name }}</td>
+                    <td>{{ book.category.title }}</td>
+                    <td><img src="{{ book.cover.url }}" alt="{{ book.title }}" width="50"></td>
+                    <td>
+                        <div class="d-flex justify-content-start">
+                            <a href="{% url 'lib-admin:book-edit' book.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                            <a href="{% url 'lib-admin:book-delete' book.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">There are currently no Books available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

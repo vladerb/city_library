@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Category{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card w-50 bg-light shadow-lg p-4">
+        <h1 class="mb-3 text-center">Create Category</h1>
+        <form method="post" enctype="multipart/form-data" novalidate class="text-center"> 
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            <button type="submit" class="btn btn-primary btn-block mt-4">Save Category</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

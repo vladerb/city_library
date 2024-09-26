@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Book{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card w-75 bg-light shadow-lg p-4">
+        <h1 class="mb-3 text-center">Create a new book</h1>
+        <form method="post" enctype="multipart/form-data" novalidate class="text-center">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Ліва колонка -->
+                <div class="col-md-6">
+                    <!-- Поле для назви книги -->
+                    <div class="form-group">
+                        {{ form.title|as_crispy_field }}
+                    </div>
+                    
+                    <!-- Поле для вибору автора з кнопкою -->
+                    <div class="form-group mt-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            {{ form.author|as_crispy_field }}
+                            <a href="{% url 'lib-admin:author-create' %}?next={{ request.path }}" class="btn btn-secondary btn-sm ml-2">Add Author</a>
+                        </div>
+                    </div>
+
+                    <!-- Поле для вибору категорії з кнопкою -->
+                    <div class="form-group mt-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            {{ form.category|as_crispy_field }}
+                            <a href="{% url 'lib-admin:category-create' %}?next={{ request.path }}" class="btn btn-secondary btn-sm ml-2">Add Category</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Права колонка -->
+                <div class="col-md-6">
+                    <!-- Поле для обкладинки з покращеним стилем -->
+                    <div class="form-group">
+                        <div class="custom-file">
+                            {{ form.cover|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <!-- Поле для опису книги -->
+                    <div class="form-group mt-3">
+                        {{ form.description|as_crispy_field }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка створення книги -->
+            <button type="submit" class="btn btn-primary btn-block mt-5">Create Book</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

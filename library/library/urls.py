@@ -11,7 +11,7 @@ urlpatterns = [
     path("", RedirectView.as_view(url="/archive/", permanent=True)),
     path('archive/', include('archive.urls', namespace='archive')),
     path('user/', include('accounts.urls', namespace='accounts')),
-    # path('lib-admin/', include('lib_admin.urls', namespace='lib-admin')),
+    path('lib-admin/', include('lib_admin.urls', namespace='lib-admin')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + debug_toolbar_urls()
 
 

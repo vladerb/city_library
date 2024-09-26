@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %} Authors List {% endblock %}
+
+{% block content %}
+<div class="mt-5 my-3 p-3 bg-body rounded shadow-lg">
+    <h1 class="mb-3 text-center">Authors List</h1>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'lib-admin:author-create' %}" class="btn btn-primary btn-lg">Create New Author</a>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-1">
+                    <a href="?sort=id&order=asc" class="text-decoration-none">ID</a>
+                </th>
+                <th class="col-md-3">
+                    <a href="?sort=name&order={% if request.GET.sort == 'name' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Name 
+                        {% if request.GET.sort == "name" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-3">Photo</th>
+                <th class="col-md-3">Bio</th>
+                <th class="col-md-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for author in authors %}
+                <tr>
+                    <td>{{ author.id }}.</td>
+                    <td>{{ author.name }}</td>
+                    <td>
+                        {% if author.photo %}
+                            <img src="{{ author.photo.url }}" alt="{{ author.name }}" width="50">
+                        {% else %}
+                            No photo available
+                        {% endif %}
+                    </td>
+                    <td>{{ author.bio|truncatewords:15 }}</td>
+                    <td>
+                        <div class="d-flex justify-content-start">
+                            <a href="{% url 'lib-admin:author-edit' author.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                            <a href="{% url 'lib-admin:author-delete' author.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">There are currently no authors available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

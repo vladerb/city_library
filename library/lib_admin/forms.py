@@ -2,6 +2,7 @@ from django import forms
 from archive.models import Author, Category, Book
 
 
+# Authors
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
@@ -9,14 +10,9 @@ class AuthorForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Write a short bio about the author...'}),
         }
-
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        if Author.objects.filter(name=name).exists():
-            raise forms.ValidationError('An author with this name already exists.')
-        return name
     
 
+# Categories
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
@@ -29,6 +25,7 @@ class CategoryForm(forms.ModelForm):
         return title
     
 
+# Books
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
@@ -37,8 +34,3 @@ class BookForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter the book description...'}),
         }
 
-    def clean_title(self):
-        title = self.cleaned_data.get('title')
-        if Book.objects.filter(title=title).exists():
-            raise forms.ValidationError('A book with this title already exists.')
-        return title

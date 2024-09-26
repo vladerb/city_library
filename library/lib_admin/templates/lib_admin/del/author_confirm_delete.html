@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Delete Author{% endblock %}
+
+{% block content %}
+<div class="mt-5 my-3 p-3 bg-body rounded shadow-lg">
+    <h1 class="mb-3 text-center">Delete Author</h1>
+    <p class="text-center">Are you sure you want to delete "{{ object.name }}"?</p>
+    
+    <div class="text-center">
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            <a href="{% url 'lib-admin:authors-list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
