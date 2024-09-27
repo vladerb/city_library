@@ -3,14 +3,14 @@
 
 {% block content %}
 <div class="mt-5 my-3 p-3 bg-body rounded shadow-lg">
-    <h1 class="mb-3 text-center">Delete Book</h1>
-    <p class="text-center text-danger h2">Are you sure you want to delete "{{ object.title }}" - {{ object.author.name }}?</p>
+    <h1 class="mb-3 text-center">Delete Category</h1>
+    <p class="text-center text-danger h2">Are you sure you want to delete "{{ object.title }}"?</p>
     
     <div class="text-center mt-3">
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Confirm Delete</button>
-            <a href="{% url 'lib-admin:books-list' %}" class="btn btn-secondary">Cancel</a>
+            <a href="{% url 'lib-admin:categories-list' %}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>

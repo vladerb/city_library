@@ -9,10 +9,10 @@ urlpatterns = [
     path('authors/<int:pk>/edit', views.AuthorEditView.as_view(), name='author-edit'),
     path('authors/<int:pk>/delete/', views.AuthorDeleteView.as_view(), name='author-delete'),
 
-    # path('category/', ),
+    path('category/', views.CategoryListView.as_view(), name='categories-list'),
     path('category/create/', views.CategoryCreateView.as_view(), name='category-create'),
-    # path('category/<int:pk>/edit', views. EditView.as_view(), name='category-edit'),
-    # path('category/<int:pk>/delete/', views. DeleteView.as_view(), name='category-delete'),
+    path('category/<int:pk>/edit', views.CategoryEditView.as_view(), name='category-edit'),
+    path('category/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='category-delete'),
 
     path('books/', views.BookListView.as_view(), name='books-list'),
     path('books/create/', views.BookCreateView.as_view(), name='book-create'),
@@ -23,4 +23,8 @@ urlpatterns = [
     # path('books-receipts/create/', views.Book CreateView.as_view(), name='book-receipts-create'),
     # path('books-receipts/<int:pk>/edit', views.Book EditView.as_view(), name='book-receipts-edit'),
     # path('books-receipts/<int:pk>/delete/', views.Book DeleteView.as_view(), name='book-receipts-delete'),
+
+    # path('users/', views.Book ListView.as_view(), name='users-list'),
+    # path('users/<int:pk>/edit', views. EditView.as_view(), name='busers-edit'),
+    # path('users/<int:pk>/delete/', views. DeleteView.as_view(), name='users-delete'),
 ]

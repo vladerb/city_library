@@ -8,7 +8,7 @@
     <div class="text-center mb-4">
         <a href="{% url 'lib-admin:book-create' %}" class="btn btn-primary btn-lg">Create New Book</a>
     </div>
-    
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -16,17 +16,20 @@
                     <a href="?sort=id&order=asc" class="text-decoration-none">id</a>
                 </th>
                 <th class="col-md-3">
-                    <a href="?sort=title&order={% if request.GET.sort == 'title' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Title 
+                    <a href="?sort=title&order={% if request.GET.sort == 'title' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">Title
                         {% if request.GET.sort == "title" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
                     </a>
                 </th>
                 <th class="col-md-3">
-                    <a href="?sort=author__name&order={% if request.GET.sort == 'author__name' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Author 
+                    <a href="?sort=author__name&order={% if request.GET.sort == 'author__name' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">Author
                         {% if request.GET.sort == "author__name" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
                     </a>
                 </th>
                 <th class="col-md-3">
-                    <a href="?sort=category__title&order={% if request.GET.sort == 'category__title' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}" class="text-decoration-none">Category 
+                    <a href="?sort=category__title&order={% if request.GET.sort == 'category__title' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">Category
                         {% if request.GET.sort == "category__title" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
                     </a>
                 </th>
@@ -36,25 +39,65 @@
         </thead>
         <tbody>
             {% for book in books %}
-                <tr>
-                    <td>{{ book.id }}.</td>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author.name }}</td>
-                    <td>{{ book.category.title }}</td>
-                    <td><img src="{{ book.cover.url }}" alt="{{ book.title }}" width="50"></td>
-                    <td>
-                        <div class="d-flex justify-content-start">
-                            <a href="{% url 'lib-admin:book-edit' book.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
-                            <a href="{% url 'lib-admin:book-delete' book.pk %}" class="btn btn-danger btn-sm">Delete</a>
-                        </div>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ book.id }}.</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author.name }}</td>
+                <td>{{ book.category.title }}</td>
+                <td><img src="{{ book.cover.url }}" alt="{{ book.title }}" width="50"></td>
+                <td>
+                    <div class="d-flex justify-content-start">
+                        <a href="{% url 'lib-admin:book-edit' book.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                        <a href="{% url 'lib-admin:book-delete' book.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
             {% empty %}
-                <tr>
-                    <td colspan="6" class="text-center">There are currently no Books available.</td>
-                </tr>
+            <tr>
+                <td colspan="6" class="text-center">There are currently no Books available.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+    
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page_obj.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}"
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for page_number in page_obj.paginator.page_range %}
+            {% if page_obj.number == page_number %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ page_number }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page_obj.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}"
+                    aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
 </div>
 {% endblock %}
