@@ -60,7 +60,7 @@ class UserEditForm(UserChangeForm):
         return username
     
 
-class ProfileEditFrom(forms.ModelForm):
+class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['date_of_birth', 'photo', 'place_of_study', 'form_of_study']

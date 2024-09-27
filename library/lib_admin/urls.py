@@ -24,7 +24,7 @@ urlpatterns = [
     # path('books-receipts/<int:pk>/edit', views.Book EditView.as_view(), name='book-receipts-edit'),
     # path('books-receipts/<int:pk>/delete/', views.Book DeleteView.as_view(), name='book-receipts-delete'),
 
-    # path('users/', views.Book ListView.as_view(), name='users-list'),
-    # path('users/<int:pk>/edit', views. EditView.as_view(), name='busers-edit'),
-    # path('users/<int:pk>/delete/', views. DeleteView.as_view(), name='users-delete'),
+    path('users/', views.UserListView.as_view(), name='users-list'),
+    path('users/<int:pk>/edit', views.UserProfileEditView.as_view(), name='user-edit'),
+    path('users/<int:pk>/delete/', views.UserDeleteView.as_view(), name='user-delete'),
 ]

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Delete User{% endblock %}
+
+{% block content %}
+<div class="mt-5 my-3 p-3 bg-body rounded shadow-lg">
+    <h1 class="mb-3 text-center">Delete User</h1>
+    <p class="text-center text-danger h2">Are you sure you want to delete "{{ object.username }}" - {{ object.first_name }} {{ object.last_name }}?</p>
+    
+    <div class="text-center mt-3">
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            <a href="{% url 'lib-admin:users-list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

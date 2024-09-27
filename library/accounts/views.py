@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView, UpdateView, FormView
 from django.urls import reverse_lazy
 
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditFrom, ContactForm
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm
 
 
 # Feedback
@@ -84,9 +84,9 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['profile_form'] = ProfileEditFrom(data=self.request.POST, files=self.request.FILES, instance=self.request.user.profile) # type: ignore
+            context['profile_form'] = ProfileEditForm(data=self.request.POST, files=self.request.FILES, instance=self.request.user.profile) # type: ignore
         else:
-            context['profile_form'] = ProfileEditFrom(instance=self.request.user.profile) #type: ignore
+            context['profile_form'] = ProfileEditForm(instance=self.request.user.profile) #type: ignore
         return context
 
     def get_object(self):
@@ -94,7 +94,7 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        profile_form = ProfileEditFrom(self.request.POST, self.request.FILES, instance=self.request.user.profile)  # type: ignore
+        profile_form = ProfileEditForm(self.request.POST, self.request.FILES, instance=self.request.user.profile)  # type: ignore
         if profile_form.is_valid():
             profile_form.save()
             messages.success(self.request, 'Profile updated successfully.')

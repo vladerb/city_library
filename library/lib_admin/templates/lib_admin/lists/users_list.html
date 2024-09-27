@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %} Users List {% endblock %}
+
+{% block content %}
+<div class="mt-5 my-3 p-3 bg-body rounded shadow-lg">
+    <h1 class="mb-3 text-center">Users List</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-1">
+                    <a href="?sort=id&order=asc" class="text-decoration-none">ID</a>
+                </th>
+                <th class="col-md-2">
+                    <a href="?sort=username&order={% if request.GET.sort == 'username' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">Username
+                        {% if request.GET.sort == "username" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-3">
+                    <a href="?sort=email&order={% if request.GET.sort == 'email' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">Email
+                        {% if request.GET.sort == "email" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-2">
+                    <a href="?sort=first_name&order={% if request.GET.sort == 'first_name' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">First Name
+                        {% if request.GET.sort == "first_name" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-2">
+                    <a href="?sort=last_name&order={% if request.GET.sort == 'last_name' and request.GET.order == 'asc' %}desc{% else %}asc{% endif %}"
+                        class="text-decoration-none">Last Name
+                        {% if request.GET.sort == "last_name" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                <th class="col-md-3">B-Day</th> 
+                <th class="col-md-2">
+                    <a href="?sort=is_staff&order={% if request.GET.sort == 'is_staff' and request.GET.order == 'desc' %}asc{% else %}desc{% endif %}"
+                        class="text-decoration-none">Staff
+                        {% if request.GET.sort == "is_staff" %}▲{% if request.GET.order == 'asc' %}▼{% endif %}{% endif %}
+                    </a>
+                </th>
+                
+                <th class="col-md-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}.</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.profile.date_of_birth|date:"Y-m-d" }}</td>
+                <td>{{ user.is_staff|yesno:"Yes,No" }}</td>
+                <td>
+                    <div class="d-flex justify-content-start">
+                        <a href="{% url 'lib-admin:user-edit' user.pk %}" class="btn btn-warning btn-sm me-2">Edit</a>
+                        <a href="{% url 'lib-admin:user-delete' user.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">There are currently no Users available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if page_obj.has_other_pages %}
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page_obj.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}"
+                    aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for page_number in page_obj.paginator.page_range %}
+            {% if page_obj.number == page_number %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ page_number }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page_obj.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.order %}&order={{ request.GET.order }}{% endif %}"
+                    aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+</div>
+{% endblock %}

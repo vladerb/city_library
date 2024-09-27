@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg bg-light p-4">
+                <h1 class="mb-3 text-center">Edit Profile</h1>
+                <p class="text-center">Update your profile information below:</p>
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.username|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.is_staff|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ profile_form.date_of_birth|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ profile_form.place_of_study|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ profile_form.form_of_study|as_crispy_field }}
+                            </div>
+                            <div class="mb-3">
+                                {{ profile_form.photo|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-center mt-2">
+                        You can change your password using 
+                        <a href="{% url 'accounts:user-password-edit' %}">this form</a>.
+                    </p>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
