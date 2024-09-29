@@ -6,9 +6,10 @@ from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
+from accounts.models import BookReceipt
 from accounts.forms import ProfileEditForm
 from archive.models import Author, Category, Book
-from .forms import AuthorForm, CategoryForm, BookForm, UserEditForm
+from .forms import AuthorForm, CategoryForm, BookForm, UserEditForm, BookReceiptsForm
 
 PAGINATION_NUMBER = 9
 USER = get_user_model()
@@ -123,7 +124,7 @@ class BookCreateView(StaffRequiredMixin, CreateView):
     template_name = 'lib_admin/forms/book_create.html'
     success_url = reverse_lazy('lib-admin:books-list')
 
-class BookEditView(UpdateView):
+class BookEditView(StaffRequiredMixin, UpdateView):
     model = Book
     form_class = BookForm
     template_name = 'lib_admin/forms/book_edit.html'
@@ -162,6 +163,50 @@ class BookListView(StaffRequiredMixin, ListView):
             sort_field = '-' + sort_field
 
         return queryset.order_by(sort_field)
+
+
+# Books Receipts
+class BookReceiptCreateView(StaffRequiredMixin, CreateView):
+    model = BookReceipt
+    form_class = BookReceiptsForm
+    template_name = 'lib_admin/forms/book_receipt_create.html'
+    success_url = reverse_lazy('lib-admin:books-receipts-list')
+
+class BookReceiptEditView(StaffRequiredMixin, UpdateView):
+    model = BookReceipt
+    form_class = BookReceiptsForm
+    template_name = 'lib_admin/forms/book_receipt_edit.html'
+    success_url = reverse_lazy('lib-admin:books-receipts-list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    
+class BookReceiptDeleteView(StaffRequiredMixin, DeleteView):
+    model = BookReceipt
+    template_name = 'lib_admin/del/book_receipts_confirm_delete.html'
+    success_url = reverse_lazy('lib-admin:books-receipts-list')
+
+class BookReceiptListView(StaffRequiredMixin, ListView):
+    model = BookReceipt
+    template_name = 'lib_admin/lists/books_receipts_list.html'
+    context_object_name = 'receipts'
+    paginate_by = PAGINATION_NUMBER
+
+    def get_queryset(self):
+        sort_field = self.request.GET.get('sort', 'id')
+        order = self.request.GET.get('order', 'asc')
+        
+        queryset = (BookReceipt.objects.all()
+                    .select_related('profile', 'book'))
+        
+        if order == 'desc':
+            sort_field = '-' + sort_field
+        
+        # Return sorted queryset
+        return queryset.order_by(sort_field)
+
 
 
 # Users

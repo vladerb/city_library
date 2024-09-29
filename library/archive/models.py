@@ -40,6 +40,9 @@ class Book(models.Model):
     def average_rating(self) -> int:
         return int(round(Rating.objects.filter(book=self).aggregate(Avg('score'))['score__avg'] or 0))
     
+    def __str__(self) -> str:
+        return f'{self.title} - {self.author}'
+    
 
 class Rating(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)

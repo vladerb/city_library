@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 
+from accounts.models import BookReceipt
 from archive.models import Author, Category, Book
 
 User = get_user_model()
@@ -37,6 +38,18 @@ class BookForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter the book description...'}),
         }
+
+# Books Receipts
+class BookReceiptsForm(forms.ModelForm):
+    class Meta:
+        model = BookReceipt
+        fields = '__all__'
+
+    def clean_book(self):
+        book = self.cleaned_data.get('book')
+        if BookReceipt.objects.filter(book=book).exists():
+            raise forms.ValidationError(f'The book "{book.title}" already has a receipt.') # type: ignore
+        return book
 
 
 # Users

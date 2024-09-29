@@ -19,10 +19,10 @@ urlpatterns = [
     path('books/<int:pk>/edit', views.BookEditView.as_view(), name='book-edit'),
     path('books/<int:pk>/delete/', views.BookDeleteView.as_view(), name='book-delete'),
 
-    # path('books-receipts/', views.Book ListView.as_view(), name='books-receipts-list'),
-    # path('books-receipts/create/', views.Book CreateView.as_view(), name='book-receipts-create'),
-    # path('books-receipts/<int:pk>/edit', views.Book EditView.as_view(), name='book-receipts-edit'),
-    # path('books-receipts/<int:pk>/delete/', views.Book DeleteView.as_view(), name='book-receipts-delete'),
+    path('books-receipts/', views.BookReceiptListView.as_view(), name='books-receipts-list'),
+    path('books-receipts/create/', views.BookReceiptCreateView.as_view(), name='book-receipts-create'),
+    path('books-receipts/<int:pk>/edit', views.BookReceiptEditView.as_view(), name='book-receipts-edit'),
+    path('books-receipts/<int:pk>/delete/', views.BookReceiptDeleteView.as_view(), name='book-receipts-delete'),
 
     path('users/', views.UserListView.as_view(), name='users-list'),
     path('users/<int:pk>/edit', views.UserProfileEditView.as_view(), name='user-edit'),
