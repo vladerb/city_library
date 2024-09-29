@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
@@ -5,9 +7,12 @@ from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Avg
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import CreateView, TemplateView, UpdateView, FormView
 from django.urls import reverse_lazy
+
+import logging
 
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, ContactForm
 
@@ -33,6 +38,8 @@ class FeedbackSuccessView(TemplateView):
 
 
 # User
+user_logger = logging.getLogger('user_accounts')
+
 class UserRegisterView(SuccessMessageMixin, CreateView):
     model = get_user_model()
     form_class = UserRegistrationForm
@@ -45,10 +52,19 @@ class UserRegisterView(SuccessMessageMixin, CreateView):
         next_url = self.request.POST.get('next')
         if next_url:
             return redirect(next_url)
+        user_logger.info(
+            f"[{datetime.now()}] INFO: User registered successful| "
+            f"User: {form.cleaned_data['username']} | "
+            f"IP: {self.request.META.get('REMOTE_ADDR')}"
+        ) 
         return response
 
     def form_invalid(self, form):
         messages.error(self.request, 'Please correct the errors below.')
+        user_logger.warning(
+            f"[{datetime.now()}] WARNING: User registered failed| "
+            f"IP: {self.request.META.get('REMOTE_ADDR')}"
+        ) 
         return super().form_invalid(form)
     
     def get_success_url(self) -> str:
@@ -59,6 +75,21 @@ class UserLoginView(LoginView):
     form_class = AuthenticationForm
     template_name = "accounts/user/login.html"
     redirect_authenticated_user = False
+
+    def form_valid(self, form: AuthenticationForm) -> HttpResponse:
+        user_logger.info(
+            f"[{datetime.now()}] INFO: User log-in successful| "
+            f"User: {form.cleaned_data['username']} | "
+            f"IP: {self.request.META.get('REMOTE_ADDR')}"
+        ) 
+        return super().form_valid(form)
+    
+    def form_invalid(self, form: AuthenticationForm) -> HttpResponse:
+        user_logger.warning(
+            f"[{datetime.now()}] WARNING: User log-in failed  | "
+            f"IP: {self.request.META.get('REMOTE_ADDR')}"
+        ) 
+        return super().form_invalid(form)
     
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
@@ -104,11 +135,26 @@ class UserProfileEditView(LoginRequiredMixin, UpdateView):
         return response
 
 # Password
+pass_logger = logging.getLogger('user_password')
+
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/user/password_change.html'
     success_url = reverse_lazy('accounts:user-profile')
-
+    
     def form_valid(self, form):
+        pass_logger.info(
+            f"[{datetime.now()}] INFO: Password change successful | "
+            f"User: {self.request.user.username} | " # type: ignore
+            f"IP: {self.request.META.get('REMOTE_ADDR')}"
+        ) 
         messages.success(self.request, 'Password changed successfully.')
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        pass_logger.warning(
+            f"[{datetime.now()}] WARNING: Password change failed  | "
+            f"User: {self.request.user.username} | " # type: ignore
+            f"IP: {self.request.META.get('REMOTE_ADDR')}"
+        ) 
+        return super().form_invalid(form)
 

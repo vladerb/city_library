@@ -199,7 +199,7 @@ class BookReceiptListView(StaffRequiredMixin, ListView):
         order = self.request.GET.get('order', 'asc')
         
         queryset = (BookReceipt.objects.all()
-                    .select_related('profile', 'book'))
+                    .select_related('profile', 'book', 'profile__user'))
         
         if order == 'desc':
             sort_field = '-' + sort_field

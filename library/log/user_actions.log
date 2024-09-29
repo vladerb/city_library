@@ -1,0 +1,7 @@
+[2024-09-30 00:33:31.107918] INFO: User log-in successful| User:  | IP: 127.0.0.1
+[2024-09-30 00:34:33.536114] INFO: User log-in successful| User: bukht | IP: 127.0.0.1
+[2024-09-30 00:35:01.533505] WARNING: User log-in failed  | IP: 127.0.0.1
+[2024-09-30 00:39:02.963462] WARNING: User registered failed| IP: 127.0.0.1
+[2024-09-30 00:40:02.725659] WARNING: User registered failed| IP: 127.0.0.1
+[2024-09-30 00:42:03.679519] WARNING: User registered failed| IP: 127.0.0.1
+[2024-09-30 00:48:26.610767] WARNING: User registered failed| IP: 127.0.0.1

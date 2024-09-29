@@ -51,7 +51,7 @@
                                 <div class="card-header bg-info text-white text-center">
                                     Due to:
                                     {% for receipt in book.receipts.all %}
-                                    {{ receipt.date_due }}{% if not forloop.last %}, {% endif %}
+                                    {{ receipt.date_due }}
                                     {% endfor %}
                                 </div>
                                 {% endif %}
