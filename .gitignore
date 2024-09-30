@@ -3,4 +3,5 @@ __init__.py
 .venv
 .vscode
 __pycache__/
+__pycache__
 D:\city_library\.venv
