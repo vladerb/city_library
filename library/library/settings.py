@@ -1,3 +1,4 @@
+import dj_database_url
 import os
 from pathlib import Path
 
@@ -75,6 +76,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASES['default'] = dj_database_url.parse("postgresql://city_library_db_user:He5dyEt5lPM2jffFYgZYcnVPkcqyCW02@dpg-crtbkpu8ii6s73ek6h50-a.frankfurt-postgres.render.com/city_library_db")  # type: ignore
 
 
 # Password validation
