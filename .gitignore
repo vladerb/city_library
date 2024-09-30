@@ -1,5 +1,5 @@
 .env
 __init__.py
-.venv
-.vscode
+.venv/
+.vscode/
 __pycache__/

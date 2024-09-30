@@ -1,4 +1,6 @@
+import dj_database_url
 import os
+from decouple import config
 from pathlib import Path
 
 
@@ -6,12 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qjeir(sx)!8nus&^%tj7@xa=g(=exk1&#5t77l%u@)p)3s-$u4'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(',') # type: ignore
 
 
 # Application definition
@@ -75,6 +77,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+DATABASES['default'] = dj_database_url.parse(config("DATABASE_URL")) # type: ignore
 
 
 # Password validation
