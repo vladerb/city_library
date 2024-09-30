@@ -78,7 +78,7 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.parse(config("DATABASE_URL")) # type: ignore
+# DATABASES['default'] = dj_database_url.parse(config("DATABASE_URL")) # type: ignore
 
 
 # Password validation
